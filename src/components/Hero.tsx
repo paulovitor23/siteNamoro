@@ -44,7 +44,8 @@ export default function Hero() {
     <section className="h-screen bg-[#4a0e1e] flex flex-col items-center justify-center text-[#fdf5e6] p-6 relative overflow-hidden">
       {/* Título principal */}
       <h2 className={`${playfair.className} text-3xl md:text-4xl mb-16 opacity-90 italic`}>
-        Nossos 6 Meses — PV + MC
+        Nossos 6 Meses: 
+        PV + MC
       </h2>
 
       {/* O contador central */}
