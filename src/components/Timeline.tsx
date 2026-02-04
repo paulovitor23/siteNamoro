@@ -1,46 +1,67 @@
-// src/components/Timeline.tsx
+'use client';
+
 import { Playfair_Display } from 'next/font/google';
-import { Heart } from 'lucide-react';
-// Importação dos dados e da Tipagem (Boa prática de Engenheiro!)
-import { timelineEvents } from '@/data/timeline'; 
+import { Heart, Calendar } from 'lucide-react';
+import { timelineEvents } from '@/data/timeline';
 
 const playfair = Playfair_Display({ subsets: ['latin'] });
 
 export default function Timeline() {
   return (
-    <section id="timeline" className="bg-[#3d0b19] py-24 px-6 min-h-screen">
-      <div className="max-w-4xl mx-auto relative">
+    <section id="nossa-historia" className="bg-[#3d0b19] py-20 px-4 md:px-6 min-h-screen">
+      <div className="max-w-5xl mx-auto relative">
         
-        {/* Linha Central */}
-        <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-px bg-[#fdf5e6]/20" />
+        {/* Linha Vertical: No mobile fica na esquerda (left-4), no desktop centraliza (left-1/2) */}
+        <div className="absolute left-4 md:left-1/2 transform md:-translate-x-1/2 h-full w-px bg-[#fdf5e6]/20" />
 
-        <div className="space-y-32">
+        <div className="space-y-12 md:space-y-32">
           {timelineEvents.map((event, index) => (
-            <div key={index} className="relative flex items-center justify-between w-full">
+            <div key={index} className="relative flex flex-col md:flex-row items-start md:items-center justify-between w-full">
               
-              {/* Lado da Data/Label */}
-              <div className={`w-[42%] text-right pr-8 ${index % 2 !== 0 ? 'md:order-last md:text-left md:pl-8 md:pr-0' : ''}`}>
-                <div className="bg-[#fdf5e6] text-[#4a0e1e] inline-block px-4 py-1 rounded-full text-xs font-bold mb-2">
+              {/* Lado A: Data/Label (Desktop: alterna | Mobile: fixo à esquerda) */}
+              <div className={`
+                w-full md:w-[42%] pl-10 md:pl-0 
+                ${index % 2 !== 0 ? 'md:order-last md:text-left md:pl-8' : 'md:text-right md:pr-8'}
+                mb-2 md:mb-0
+              `}>
+                <div className="bg-[#fdf5e6] text-[#4a0e1e] inline-block px-3 py-1 rounded-full text-[10px] md:text-xs font-bold mb-1 md:mb-2 shadow-md">
                   {event.label}
                 </div>
-                <p className="text-[#fdf5e6]/60 text-sm tracking-widest">{event.date}</p>
+                <p className="text-[#fdf5e6]/60 text-xs md:text-sm tracking-widest block uppercase font-medium">
+                  {event.date}
+                </p>
               </div>
 
-              {/* Ponto na Linha */}
-              <div className="absolute left-1/2 transform -translate-x-1/2 w-3 h-3 bg-[#fdf5e6] rounded-full border-4 border-[#3d0b19] z-10 shadow-[0_0_10px_rgba(253,245,230,0.5)]" />
+              {/* Ponto na Linha: Acompanha o movimento da linha vertical */}
+              <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-2.5 h-2.5 md:w-4 md:h-4 bg-[#fdf5e6] rounded-full border-[3px] md:border-4 border-[#3d0b19] z-10 shadow-[0_0_10px_rgba(253,245,230,0.4)]" />
 
-              {/* Lado do Card */}
-              <div className={`w-[42%] ${index % 2 !== 0 ? 'md:order-first md:text-right' : 'pl-8'}`}>
-                <div className="group bg-[#4a0e1e]/30 border border-[#fdf5e6]/10 p-5 rounded-2xl hover:border-[#fdf5e6]/40 transition-all duration-500 shadow-xl">
-                  <div className="aspect-video mb-4 overflow-hidden rounded-xl bg-black/20">
+              {/* Lado B: Card de Conteúdo (Desktop: alterna | Mobile: fixo à esquerda) */}
+              <div className={`
+                w-full md:w-[42%] pl-10 md:pl-0
+                ${index % 2 !== 0 ? 'md:order-first md:text-right' : 'md:pl-8'}
+              `}>
+                <div className="group bg-[#4a0e1e]/40 border border-[#fdf5e6]/10 p-4 md:p-6 rounded-2xl hover:border-[#fdf5e6]/30 transition-all duration-500 shadow-xl backdrop-blur-sm">
+                  {/* Container da Imagem */}
+                  <div className="aspect-video mb-4 overflow-hidden rounded-xl bg-black/40 border border-[#fdf5e6]/5">
                     <img 
                       src={event.image} 
                       alt={event.title}
-                      className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
+                      className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
                     />
                   </div>
-                  <h3 className={`${playfair.className} text-xl text-[#fdf5e6] mb-2`}>{event.title}</h3>
-                  <p className="text-sm text-[#fdf5e6]/70 leading-relaxed italic">"{event.description}"</p>
+                  
+                  <h3 className={`${playfair.className} text-lg md:text-2xl text-[#fdf5e6] mb-2 leading-tight`}>
+                    {event.title}
+                  </h3>
+                  
+                  <p className="text-xs md:text-sm text-[#fdf5e6]/70 leading-relaxed italic font-light">
+                    "{event.description}"
+                  </p>
+
+                  <div className="mt-4 flex md:hidden items-center gap-2 text-[#fdf5e6]/40">
+                    <Heart className="w-3 h-3 fill-current" />
+                    <span className="text-[10px] uppercase tracking-tighter">Nosso Momento</span>
+                  </div>
                 </div>
               </div>
 
