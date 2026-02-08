@@ -1,7 +1,7 @@
 'use client';
 
 import { Playfair_Display } from 'next/font/google';
-import { Heart } from 'lucide-react';
+import { Heart, BookOpen } from 'lucide-react';
 import { timelineEvents } from '@/data/timeline';
 import Link from 'next/link'; 
 
@@ -18,6 +18,7 @@ export default function Timeline() {
           {timelineEvents.map((event, index) => (
             <div key={index} className="relative flex flex-col md:flex-row items-start md:items-center justify-between w-full">
               
+              {/* Lado A: Data/Label */}
               <div className={`
                 w-full md:w-[42%] pl-10 md:pl-0 
                 ${index % 2 !== 0 ? 'md:order-last md:text-left md:pl-8' : 'md:text-right md:pr-8'}
@@ -31,38 +32,57 @@ export default function Timeline() {
                 </p>
               </div>
 
+              {/* Ponto na Linha */}
               <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-2.5 h-2.5 md:w-4 md:h-4 bg-[#fdf5e6] rounded-full border-[3px] md:border-4 border-[#3d0b19] z-10 shadow-[0_0_10px_rgba(253,245,230,0.4)]" />
 
+              {/* Lado B: Card de Conteúdo */}
               <div className={`
                 w-full md:w-[42%] pl-10 md:pl-0
                 ${index % 2 !== 0 ? 'md:order-first md:text-right' : 'md:pl-8'}
               `}>
                 <div className="group bg-[#4a0e1e]/40 border border-[#fdf5e6]/10 p-4 md:p-6 rounded-2xl hover:border-[#fdf5e6]/30 transition-all duration-500 shadow-xl backdrop-blur-sm">
                   
-                  <Link href={`/momentos/${event.id}`}>
-                    <div className="aspect-video mb-4 overflow-hidden rounded-xl bg-black/40 border border-[#fdf5e6]/5 cursor-pointer relative group/img">
-                      <img 
-                        src={event.image} 
-                        alt={event.title}
-                        className="w-full h-full object-cover grayscale-[20%] group-hover/img:grayscale-0 transition-all duration-700 group-hover/img:scale-110"
-                      />
-                      <div className="absolute inset-0 bg-black/20 group-hover/img:bg-transparent transition-colors flex items-center justify-center opacity-0 group-hover/img:opacity-100">
-                        <span className="text-[10px] uppercase tracking-widest bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm">Ver Detalhes</span>
+                  {/* CONDIÇÃO: Só mostra o container da imagem se 'event.image' existir */}
+                  {event.image ? (
+                    <Link href={`/momentos/${event.id}`}>
+                      <div className="aspect-video mb-4 overflow-hidden rounded-xl bg-black/40 border border-[#fdf5e6]/5 cursor-pointer relative group/img">
+                        <img 
+                          src={event.image} 
+                          alt={event.title}
+                          className="w-full h-full object-cover grayscale-[20%] group-hover/img:grayscale-0 transition-all duration-700 group-hover/img:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-black/20 group-hover/img:bg-transparent transition-colors flex items-center justify-center opacity-0 group-hover/img:opacity-100">
+                          <span className="text-[10px] uppercase tracking-widest bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm">Ver Detalhes</span>
+                        </div>
                       </div>
+                    </Link>
+                  ) : (
+                    /* Se não tiver imagem, mostra um ícone sutil de "leitura" */
+                    <div className="mb-4 flex items-center gap-2 opacity-30">
+                       <BookOpen size={16} />
+                       <span className="text-[10px] uppercase tracking-widest">Momento em palavras</span>
                     </div>
-                  </Link>
+                  )}
                   
-                  <h3 className={`${playfair.className} text-lg md:text-2xl text-[#fdf5e6] mb-2 leading-tight`}>
-                    {event.title}
-                  </h3>
+                  {/* Título sempre clicável para levar aos detalhes */}
+                  <Link href={`/momentos/${event.id}`}>
+                    <h3 className={`${playfair.className} text-lg md:text-2xl text-[#fdf5e6] mb-2 leading-tight hover:text-[#fdf5e6]/70 transition-colors cursor-pointer`}>
+                      {event.title}
+                    </h3>
+                  </Link>
                   
                   <p className="text-xs md:text-sm text-[#fdf5e6]/70 leading-relaxed italic font-light">
                     "{event.description}"
                   </p>
 
-                  <div className="mt-4 flex md:hidden items-center gap-2 text-[#fdf5e6]/40">
-                    <Heart className="w-3 h-3 fill-current" />
-                    <span className="text-[10px] uppercase tracking-tighter">Nosso Momento</span>
+                  {/* Rodapé do card varia se tem imagem ou não */}
+                  <div className="mt-4 flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-[#fdf5e6]/40">
+                      <Heart className="w-3 h-3 fill-current" />
+                      <span className="text-[10px] uppercase tracking-tighter">
+                        {event.image ? 'Nosso Momento' : 'Clica para ler mais'}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
